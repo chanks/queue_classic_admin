@@ -25,7 +25,7 @@ describe "The root page", :type => :feature do
     visit "/"
 
     page.should have_content "Class.method"
-    click_button "Destroy"
+    click_button "Destroy Job"
     page.should have_no_content "Class.method"
   end
 
@@ -35,9 +35,9 @@ describe "The root page", :type => :feature do
 
     visit '/'
 
-    page.should have_button "Unlock"
-    click_button "Unlock"
-    page.should have_no_button "Unlock"
+    page.should have_button "Unlock Job"
+    click_button "Unlock Job"
+    page.should have_no_button "Unlock Job"
     execute_sql("SELECT * FROM queue_classic_jobs WHERE locked_at IS NOT NULL").should == []
   end
 
