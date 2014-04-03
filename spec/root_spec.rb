@@ -62,6 +62,7 @@ describe "The root page", :type => :feature do
     page.should have_no_content "Class.method0"
 
     click_link "Next Page"
+    page.should have_no_link "Next Page"
     page.should have_no_content "Class.method1"
     page.should have_content "Class.method0"
 
