@@ -68,9 +68,9 @@
 <br />
 
 <% if previous_page? %>
-  <a href="?page=<%= page_number - 1 %>">Previous Page</a>
+  <a href="?<%= params.merge('page' => page_number - 1).map{|k,v| "#{k}=#{v}"}.join("&") %>">Previous Page</a>
 <% end %>
 
 <% if next_page? %>
-  <a href="?page=<%= page_number + 1 %>">Next Page</a>
+  <a href="?<%= params.merge('page' => page_number + 1).map{|k,v| "#{k}=#{v}"}.join("&") %>">Next Page</a>
 <% end %>

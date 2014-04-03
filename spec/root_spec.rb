@@ -69,4 +69,18 @@ describe "The root page", :type => :feature do
     click_link "Previous Page"
     page.should have_content "Class.method1"
   end
+
+  it "should allow the user to stay on the same queue while paginating" do
+    200.times { |i| QC::Queue.new(i.even?.to_s).enqueue "Class.method#{i}" }
+    visit "/"
+    click_link "true"
+    page.should have_content "Class.method198"
+    page.should have_no_content "Class.method197"
+    page.should have_content "Class.method196"
+
+    click_link "Next Page"
+    page.should have_content "Class.method98"
+    page.should have_content "Class.method96"
+    page.should have_no_content "Class.method97"
+  end
 end
