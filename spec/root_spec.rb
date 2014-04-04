@@ -60,6 +60,15 @@ describe "The root page", :type => :feature do
     execute_sql("SELECT * FROM queue_classic_jobs").should == []
   end
 
+  it "should allow the user to unlock all jobs locked more than 5 minutes ago" do
+    QC.enqueue "Old.job"
+    execute_sql("UPDATE queue_classic_jobs SET locked_at = now() - '6 minutes'::interval")
+    QC.enqueue "New.job"
+    visit "/"
+    click_button "Unlock > 5 Min Old"
+    execute_sql("SELECT * FROM queue_classic_jobs WHERE locked_at IS NOT NULL").should == []
+  end
+
   it "should allow the user to page back and forth between results" do
     101.times { |i| QC.enqueue "Class.method#{i}" }
     visit "/"

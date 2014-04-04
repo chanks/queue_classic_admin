@@ -37,6 +37,11 @@ module QueueClassic
       redirect '/'
     end
 
+    post '/queue_classic_jobs/unlock_all' do
+      execute "UPDATE queue_classic_jobs SET locked_at = NULL WHERE locked_at < now() - '5 minutes'::interval"
+      redirect '/'
+    end
+
     helpers do
       def get_column_names(table_name)
         @_column_name_cache ||= {}
