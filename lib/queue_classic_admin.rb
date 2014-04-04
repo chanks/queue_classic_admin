@@ -5,16 +5,17 @@ module QueueClassic
   class Admin < Sinatra::Base
     get '/:table_name?' do
       @tables = get_table_names
-      table_name = params[:table_name] || QC::TABLE_NAME
+      table_name = (params[:table_name] || QC::TABLE_NAME).to_s
       halt(404, "Invalid table.") unless @tables.include?(table_name)
 
       @column_names = get_column_names(table_name)
       offset = (page_number - 1) * jobs_per_page
+      order_by = %w(id not_before).find{|c| @column_names.include?(c)}
 
       if params[:q_name]
-        @queue_classic_jobs = execute("SELECT * FROM queue_classic_jobs WHERE q_name = $1 ORDER BY id DESC LIMIT $2 OFFSET $3", [params[:q_name], jobs_per_page, offset])
+        @queue_classic_jobs = execute("SELECT * FROM #{table_name} WHERE q_name = $1 #{"ORDER BY #{order_by} DESC " if order_by} LIMIT $2 OFFSET $3", [params[:q_name], jobs_per_page, offset])
       else
-        @queue_classic_jobs = execute("SELECT * FROM queue_classic_jobs ORDER BY id DESC LIMIT $1 OFFSET $2", [jobs_per_page, offset])
+        @queue_classic_jobs = execute("SELECT * FROM #{table_name} #{"ORDER BY #{order_by} DESC " if order_by} LIMIT $1 OFFSET $2", [jobs_per_page, offset])
       end
 
       @queue_counts = execute("SELECT q_name, count(*) FROM #{table_name} GROUP BY q_name")
