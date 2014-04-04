@@ -3,7 +3,7 @@ require_relative '../lib/queue_classic_admin.rb'
 require 'capybara'
 require 'capybara/rspec'
 
-Capybara.app = QueueClassic::Admin.new
+Capybara.app = QueueClassic::Admin
 
 RSpec.configure do |config|
   config.before do
