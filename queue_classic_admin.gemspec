@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "sinatra"
   s.add_dependency "queue_classic", "3.0.0rc"
-  s.add_dependency "queue_classic-later"
   s.add_dependency "pg"
   
   s.add_development_dependency "capybara"
